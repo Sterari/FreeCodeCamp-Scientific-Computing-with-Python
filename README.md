@@ -1,5 +1,5 @@
 ## FreeCodeCamp: Scientific Computing with Python Certification
-___
+
 5 Projects completed as part of FreeCodeCamp's curriculum for the Scientific Computing with Python Certification
 
 ### Projects
