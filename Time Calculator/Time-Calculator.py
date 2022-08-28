@@ -1,5 +1,4 @@
 def add_time(start, duration, day=None):
-
     # Let's start by splitting the input starting time into hours, minutes & whether its PM or AM
     start_list = start.split()
     time_list = start_list[0].split(":")
@@ -7,54 +6,37 @@ def add_time(start, duration, day=None):
     mins = int(time_list[1])
     ampm = start_list[1]
 
-    # splitting added time
+    # Splitting added time
     duration_list = duration.split(":")
     added_hours = int(duration_list[0])
     added_mins = int(duration_list[1])
 
-    # returning error if minutes field is >=60
+    # Returning error if minutes field is >=60
     if mins >= 60 or added_mins >= 60:
         return "Error: mins must be below 60"
 
-    # creating day in week dictionary for later use
-    weekdic = {
-        "monday": 1,
-        "tuesday": 2,
-        "wednesday": 3,
-        "thursday": 4,
-        "friday": 5,
-        "saturday": 6,
-        "sunday": 7,
-    }
+    # Creating day in week dictionary for later use
+    week_dic = {"monday": 1, "tuesday": 2, "wednesday": 3, "thursday": 4, "friday": 5, "saturday": 6, "sunday": 7}
 
-    # reversed dictionary
-
-    weekdic2 = {
-        1: "Monday",
-        2: "Tuesday",
-        3: "Wednesday",
-        4: "Thursday",
-        5: "Friday",
-        6: "Saturday",
-        7: "Sunday",
-    }
+    # Reversed dictionary capitalising week names for output
+    week_dic_2 = {1: "Monday", 2: "Tuesday", 3: "Wednesday", 4: "Thursday", 5: "Friday", 6: "Saturday", 7: "Sunday"}
 
     new_hours = hours + added_hours
     new_mins = mins + added_mins
 
-    # if new_mins adds up to more than 59, adjust new_mins and add 1 hour to the new_hours
+    # If new_mins adds up to more than 59, adjust new_mins and add 1 hour to the new_hours
     if new_mins > 59:
-        new_mins = new_mins - 60
-        new_hours = new_hours + 1
+        new_mins -= 60
+        new_hours += 1
 
-    # if new_hours adds up to more than 13, adjust new_hours and add 1 to the count
-    # count will be used to determine whether its AM/PM and the day of the week
+    # If new_hours adds up to more than 13, adjust new_hours and add 1 to the count
+    # Count will be used to determine whether its AM/PM and the day of the week
     count = 0
     while new_hours >= 12:
-        new_hours = new_hours - 12
-        count = count + 1
+        new_hours -= 12
+        count += 1
 
-    # determening whether its AM or PM based on the number of iterations of the above loop
+    # Determining whether its AM or PM based on the number of iterations of the above loop
     if ampm == "PM":
         if count == 0 or (count % 2) == 0:
             new_ampm = "PM"
@@ -66,34 +48,34 @@ def add_time(start, duration, day=None):
         else:
             new_ampm = "PM"
 
-    manydays = ""
+    n = 0  # This variable will be used to store the number of days that have passed
+    many_days = ""  # This will be the output string representation of number of days passed
 
-    n = 0
-    # determening whether a day or many days have passed, and how many
+    # Determining whether a day or many days have passed, and how many
     if ampm == "PM":
         if count == 1 or count == 2:
             n = 1
-            manydays = "(next day)"
+            many_days = "(next day)"
         elif count >= 3:
             if (count % 2) == 0:
                 n = str(int(count / 2))
             else:
                 n = str(int((count + 1) / 2))
 
-            manydays = """(""" + n + " days later)"
+            many_days = """(""" + n + " days later)"
     else:
         if count == 2 or count == 3:
             n = 1
-            manydays = "(next day)"
+            many_days = "(next day)"
         elif count >= 4:
             if (count % 2) == 0:
                 n = str(int(count / 2))
             else:
                 n = str(int((count + 1) / 2))
 
-            manydays = """(""" + n + " days later)"
+            many_days = """(""" + n + " days later)"
 
-    # adding an extra 0 if minutes only contain one digit
+    # Adding an extra 0 if minutes only contain one digit
     if len(str(new_mins)) == 1:
         new_mins = "0" + str(new_mins)
     else:
@@ -105,30 +87,20 @@ def add_time(start, duration, day=None):
     else:
         new_hours = str(new_hours)
 
-    # some code to get the day of the week
-    if day != None:
+    # Code to get the day of the week
+    if day is not None:
         day = str(day)
         day = day.lower()
-        dayn = weekdic[day]
-        newday = dayn + int(n)
-        while newday > 7:
-            newday = newday - 7
-        finalday = str(weekdic2[newday])
-        new_time = (
-            new_hours
-            + ":"
-            + new_mins
-            + " "
-            + new_ampm
-            + ", "
-            + finalday
-            + " "
-            + manydays
-        )
+        day_number = week_dic[day]
+        new_day = day_number + int(n)
+        while new_day > 7:
+            new_day = new_day - 7
+        final_day = str(week_dic_2[new_day])
+        new_time = (new_hours + ":" + new_mins + " " + new_ampm + ", " + final_day + " " + many_days)
         new_time = new_time.rstrip()
 
     else:
-        # concatenating to deliver final time
-        new_time = new_hours + ":" + new_mins + " " + new_ampm + " " + manydays
+        # Concatenating to deliver final time
+        new_time = new_hours + ":" + new_mins + " " + new_ampm + " " + many_days
         new_time = new_time.rstrip()
     return new_time
